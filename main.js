@@ -55,7 +55,14 @@ async function showStations(url) {
             console.log(feature);
             console.log(feature.properties.name)
             layer.bindPopup(`
-            <h3>${feature.properties.name}</h3>
+            <h4>${feature.properties.name} (${feature.geometry.coordinates})</h4>   
+            <ul>
+                <li>Lufttemperatur (°C): ${feature.properties.LT}</li>
+                <li>Relative Luftfeuchte (%): ${feature.properties.RH}</li>
+                <li>Windgeschwindigkeit (km/h): ${feature.properties.WG}</li>
+                <li>Schneehöhe (cm): ${feature.properties.WR}</li>
+            </ul>
+            <p>${feature.properties.date}</p>
             `);
         }
     }).addTo(themaLayer.stations);
