@@ -68,3 +68,8 @@ async function showStations(url) {
     }).addTo(themaLayer.stations);
 }
 showStations("https://static.avalanche.report/weather_stations/stations.geojson");
+
+// Kürzel bei ul stimmen nicht
+// Trick für fehlende Werte noch einbauen (siehe Wien Bsp.)
+// Seehöhe noch richtig darstellen ohne Koordinaten
+// Icon Bild ersetzen
