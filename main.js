@@ -55,12 +55,12 @@ async function showStations(url) {
             console.log(feature);
             console.log(feature.properties.name)
             layer.bindPopup(`
-            <h4>${feature.properties.name} (${feature.geometry.coordinates})</h4>   
+            <h4>${feature.properties.name} (${feature.geometry.coordinates[2]}m)</h4>   
             <ul>
-                <li>Lufttemperatur (°C): ${feature.properties.LT}</li>
-                <li>Relative Luftfeuchte (%): ${feature.properties.RH}</li>
-                <li>Windgeschwindigkeit (km/h): ${feature.properties.WG}</li>
-                <li>Schneehöhe (cm): ${feature.properties.WR}</li>
+                <li>Lufttemperatur (°C): ${feature.properties.LT || "-"}</li>
+                <li>Relative Luftfeuchte (%): ${feature.properties.RH || "-"}</li>
+                <li>Windgeschwindigkeit (km/h): ${feature.properties.WG || "-"}</li>
+                <li>Schneehöhe (cm): ${feature.properties.HS || "-"}</li>
             </ul>
             <p>${feature.properties.date}</p>
             `);
@@ -70,6 +70,4 @@ async function showStations(url) {
 showStations("https://static.avalanche.report/weather_stations/stations.geojson");
 
 // Kürzel bei ul stimmen nicht
-// Trick für fehlende Werte noch einbauen (siehe Wien Bsp.)
 // Seehöhe noch richtig darstellen ohne Koordinaten
-// Icon Bild ersetzen
