@@ -36,6 +36,16 @@ L.control.scale({
     imperial: false,
 }).addTo(map);
 
+function getColor(value, ramp) {
+    for (let rule of ramp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.color;
+        }
+    }
+}
+let color = getColor(17, COLORS.temperature);
+console.log("Color for -20 deg: ", color);
+
 function showTemperature(geojson) {
     L.geoJSON(geojson, {
         filter: function (feature) {
