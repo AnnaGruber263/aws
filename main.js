@@ -52,7 +52,8 @@ async function showStations(url) {
             })
         },
         onEachFeature: function (feature, layer) {
-            console.log(feature);
+            let pointInTime = new Date(feature.properties.date);
+            console.log(pointInTime);
             console.log(feature.properties.name)
             layer.bindPopup(`
             <h4>${feature.properties.name} (${feature.geometry.coordinates[2]}m)</h4>   
@@ -62,12 +63,10 @@ async function showStations(url) {
                 <li>Windgeschwindigkeit (km/h): ${feature.properties.WG || "-"}</li>
                 <li>Schneehöhe (cm): ${feature.properties.HS || "-"}</li>
             </ul>
-            <p>${feature.properties.date}</p>
+            <span>${pointInTime.toLocaleString()}</span>
             `);
         }
     }).addTo(themaLayer.stations);
 }
 showStations("https://static.avalanche.report/weather_stations/stations.geojson");
 
-// Kürzel bei ul stimmen nicht
-// Seehöhe noch richtig darstellen ohne Koordinaten
