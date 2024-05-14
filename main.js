@@ -13,9 +13,10 @@ let map = L.map("map", {
 
 // thematische Layer
 let themaLayer = {
-    stations: L.featureGroup().addTo(map),
-    temperature: L.featureGroup().addTo(map),
-    wind: L.featureGroup().addTo(map),
+    stations: L.featureGroup(),
+    temperature: L.featureGroup(),
+    wind: L.featureGroup(),
+    snowheight: L.featureGroup().addTo(map),
 }
 
 // Hintergrundlayer
@@ -31,6 +32,7 @@ L.control.layers({
     "Wetterstationen": themaLayer.stations,
     "Temperatur °C": themaLayer.temperature,
     "Wind": themaLayer.wind,
+    "Schneehöhe": themaLayer.snowheight,
 }).addTo(map);
 
 // Maßstab
@@ -90,6 +92,26 @@ function showWind(geojson) {
     }).addTo(themaLayer.wind);
 }
 
+function showSnowheight(geojson) {
+    L.geoJSON(geojson, {
+        filter: function (feature) {
+            //feature.properties.HS
+            if (feature.properties.HS > 0 && feature.properties.HS < 1000) {
+                return true;
+            }
+        },
+        pointToLayer: function (feature, latlng) {
+            let color = getColor(feature.properties.HS, COLORS.snowheight);
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon",
+                    html: `<span style="background-color:${color};">${feature.properties.HS.toFixed(1)}</span>`
+                })
+            })
+        }
+    }).addTo(themaLayer.snowheight);
+}
+
 // GeoJSON der Wetterstationen laden
 async function showStations(url) {
     let response = await fetch(url);
@@ -124,7 +146,21 @@ async function showStations(url) {
     }).addTo(themaLayer.stations);
     showTemperature(geojson);
     showWind(geojson);
+    showSnowheight(geojson);
 
 }
 showStations("https://static.avalanche.report/weather_stations/stations.geojson");
+
+// Rainviewer
+// Change default options
+L.control.rainviewer({
+    position: 'bottomleft',
+    nextButtonText: '>',
+    playStopButtonText: 'Play/Stop',
+    prevButtonText: '<',
+    positionSliderLabelText: "Hour:",
+    opacitySliderLabelText: "Opacity:",
+    animationInterval: 500,
+    opacity: 0.5
+}).addTo(map);
 
